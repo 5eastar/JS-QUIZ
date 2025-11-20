@@ -128,10 +128,10 @@ function generateQuestions() {
 }
 
 // Show current question
-function showQuestion() {
+async function showQuestion() {
     const question = questions[currentQuestion];
     const program = quizData.programs[config.programIndex];
-    
+    await fadeOutQuestion();
     // Start question timer (only on first attempt)
     if (!isInCorrection) {
         questionStartTime = Date.now();
@@ -146,8 +146,7 @@ function showQuestion() {
         questionTextElement.textContent = currentQuestionText;
     }
     
-    // Speak the question
-    speak(currentQuestionText);
+
     
     // Generate options (or reshuffle existing ones for corrections)
     if (!isInCorrection) {
@@ -166,6 +165,44 @@ function showQuestion() {
     
     // Clear feedback
     resetFeedback();
+    await fadeInQuestion();
+    // Speak the question
+    speak(currentQuestionText);
+}
+
+// Fade out question content
+function fadeOutQuestion() {
+    return new Promise((resolve) => {
+        const grid = document.getElementById('options-grid');
+        const questionText = document.getElementById('question-text');
+        if (!grid || grid.children.length === 0){
+            resolve();
+            return;
+        }
+    grid.classList.add('fade-out');
+        if (questionText) questionText.classList.add('fade-out');
+        setTimeout(() => {
+            resolve();
+        }, 500);
+    });
+        
+    }
+
+// Fade in question content
+function fadeInQuestion() {
+    return new Promise((resolve) => {
+        const grid = document.getElementById('options-grid');
+        const questionText = document.getElementById('question-text');
+        grid?.classList.remove('fade-out');
+        grid?.classList.add('fade-in');
+        questionText?.classList.remove('fade-out');
+        questionText?.classList.add('fade-in');
+        setTimeout(() => {
+            grid?.classList.remove('fade-in');
+            questionText?.classList.remove('fade-in');
+            resolve();
+        }, 500);
+    });
 }
 
 // Update question counter
@@ -230,6 +267,9 @@ function displayOptions(options) {
             img.src = imageSrc;
             card.appendChild(img);
         }
+
+        //staggered animation
+        card.style.animationDelay = `${index * 0.15}s`;
 
         // Add click handler
         card.addEventListener('click', () => handleAnswer(option, card));

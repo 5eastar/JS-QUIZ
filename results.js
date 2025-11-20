@@ -47,60 +47,42 @@ function displaySummary(results, totalTime) {
     
     // Format total time
     const formattedTotalTime = formatTime(totalTime);
+    const targetSummaryHTML = generateTargetSummary(results);
     
     const summaryHTML = `
         <h2>Overall Performance</h2>
-        <div class="summary-grid">
-            <div class="summary-item">
-                <div class="summary-value">${plusCount}/${totalQuestions}</div>
-                <div class="summary-label">Correct</div>
+        <div class="summary-wrapper">
+            <div class="summary-stats">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value">${plusCount}/${totalQuestions}</div>
+                        <div class="summary-label">Correct</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${accuracy}%</div>
+                        <div class="summary-label">Accuracy</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${avgResponseTime}s</div>
+                        <div class="summary-label">Avg Response</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${formattedTotalTime}</div>
+                        <div class="summary-label">Total Time</div>
+                    </div>
+                </div>
             </div>
-            <div class="summary-item">
-                <div class="summary-value">${accuracy}%</div>
-                <div class="summary-label">Accuracy</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">${avgResponseTime}s</div>
-                <div class="summary-label">Avg Response</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">${formattedTotalTime}</div>
-                <div class="summary-label">Total Time</div>
+            <div class="target-summary-compact">
+                <h3>Results by Target</h3>
+                ${targetSummaryHTML}
             </div>
         </div>
     `;
     
     document.getElementById('summary').innerHTML = summaryHTML;
 }
-
-// Display question-by-question results
-function displayQuestionResults(results) {
-    const tbody = document.querySelector('#questions-table tbody');
-    tbody.innerHTML = '';
-    
-    results.forEach(result => {
-        const row = document.createElement('tr');
-        
-        const scoreClass = result.result === 'plus' ? 'plus' : 'minus';
-        const scoreSymbol = result.result === 'plus' ? '+' : '−';
-        const responseTime = result.responseTime ? result.responseTime.toFixed(2) + 's' : 'N/A';
-        
-        row.innerHTML = `
-            <td>${result.questionNumber}</td>
-            <td>${result.target}</td>
-            <td><span class="score-badge ${scoreClass}">${scoreSymbol}</span></td>
-            <td>${responseTime}</td>
-        `;
-        
-        tbody.appendChild(row);
-    });
-}
-
-// Display target summary
-function displayTargetSummary(results) {
-    const tbody = document.querySelector('#targets-table tbody');
-    tbody.innerHTML = '';
-    
+// Generate target summary table HTML
+function generateTargetSummary(results) {
     // Group by target
     const targetGroups = {};
     results.forEach(result => {
@@ -109,6 +91,18 @@ function displayTargetSummary(results) {
         }
         targetGroups[result.target].push(result);
     });
+    
+    let tableHTML = `
+        <table class="compact-target-table">
+            <thead>
+                <tr>
+                    <th>Target</th>
+                    <th>Score</th>
+                    <th>Avg Time</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
     
     // Create rows for each target
     Object.keys(targetGroups).sort().forEach(target => {
@@ -119,18 +113,70 @@ function displayTargetSummary(results) {
         // Calculate average response time for this target
         const validTimes = targetResults.filter(r => r.responseTime && r.responseTime > 0);
         const avgTime = validTimes.length > 0
-            ? (validTimes.reduce((sum, r) => sum + r.responseTime, 0) / validTimes.length).toFixed(2)
-            : 'N/A';
+            ? (validTimes.reduce((sum, r) => sum + r.responseTime, 0) / validTimes.length).toFixed(1)
+            : '-';
         
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${target}</strong></td>
-            <td>${correct}/${total}</td>
-            <td>${avgTime}${avgTime !== 'N/A' ? 's' : ''}</td>
+        tableHTML += `
+            <tr>
+                <td><strong>${target}</strong></td>
+                <td>${correct}/${total}</td>
+                <td>${avgTime}${avgTime !== '-' ? 's' : ''}</td>
+            </tr>
+        `;
+    });
+    
+    tableHTML += `
+            </tbody>
+        </table>
+    `;
+    
+    return tableHTML;
+}
+
+// Display question-by-question results
+function displayQuestionResults(results) {
+    const tableWrapper = document.createElement('div');
+        tableWrapper.className = 'results-table-wrapper';
+        
+        const table = document.createElement('table');
+        table.className = 'results-table';
+        table.id = 'questions-table';
+        
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Target</th>
+                    <th>Score</th>
+                    <th>Response Time</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         `;
         
-        tbody.appendChild(row);
-    });
+        const tbody = table.querySelector('tbody');
+        
+        results.forEach(result => {
+            const row = document.createElement('tr');
+            
+            const scoreClass = result.result === 'plus' ? 'plus' : 'minus';
+            const scoreSymbol = result.result === 'plus' ? '+' : '−';
+            const responseTime = result.responseTime ? result.responseTime.toFixed(2) + 's' : 'N/A';
+            
+            row.innerHTML = `
+                <td>${result.questionNumber}</td>
+                <td>${result.target}</td>
+                <td><span class="score-badge ${scoreClass}">${scoreSymbol}</span></td>
+                <td>${responseTime}</td>
+            `;
+            
+            tbody.appendChild(row);
+        });
+        
+        tableWrapper.appendChild(table);
+        
+        const section = document.getElementById('question-results');
+        section.appendChild(tableWrapper);
 }
 
 // Format time in MM:SS format
@@ -140,7 +186,10 @@ function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+    
 }
+
+
 
 // Export results to CSV
 function exportToCSV(resultsData) {
@@ -220,3 +269,4 @@ function exportToCSV(resultsData) {
     link.click();
     document.body.removeChild(link);
 }
+
