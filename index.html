@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Quiz - Home</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Learning Game</h1>
+        <div class="top-section">
+        <!-- Pupil Selection -->
+        <div class="pupil-section">
+            <h2>Select Pupil</h2>
+            <div class="pupil-row">
+                <div class="pupil-main">
+                    <div class="form-group">
+                        <label for="pupil-select">Choose existing pupil:</label>
+                        <select id="pupil-select">
+                            <option value="">-- Select Pupil --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-pupil-name">Or add new pupil:</label>
+                        <div class="input-button-group">
+                            <input type="text" id="new-pupil-name" placeholder="Enter pupil name">
+                            <button id="add-pupil-btn" class="btn-primary">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pupil Info box -->
+                <div class="pupil-info" id="pupil-info" style="display:none;">
+                    <div class="info-box">
+                        <p><strong>Selected:</strong> <span id="selected-pupil-name"></span></p>
+                        <p><strong>Total Quizzes:</strong> <span id="pupil-quiz-count">0</span></p>
+                        <button id="view-history-btn" class="btn-link">View History</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Options -->
+        <div class="options-section">
+            <h2>Options</h2>
+            <div class="form-group">
+                <label for="field-size">Field Size (2-6):</label>
+                <input type="number" id="field-size" min="2" max="6" value="5" required>
+            </div>
+            <div class="form-group">
+                <label for="max-questions">Questions (1-20):</label>
+                <input type="number" id="max-questions" min="1" max="20" value="10" required>
+            </div>
+        </div>
+        </div>
+        <!-- Program Selection -->
+        <div class="bottom-section">
+            <h2>Select Program</h2>
+            <div class="form-group">
+                <label for="program-select">Choose a Program:</label>
+                <select id="program-select">
+                    <option value="">-- Choose a Program --</option>
+                </select>
+            </div>
+            <div class="form-group" id="stimulus-group" style="display:none;">
+                <label>Select Targets (up to 5):</label>
+                <div id="stimulus-list" class="checkbox-list"></div>
+                <p class="hint">Selected: <span id="selected-count">0</span>/5</p>
+            </div>
+            <button id="start-btn" class="btn" disabled>Start Quiz</button>
+        </div>
+    </div>
+    
+    <script src="data.js"></script>
+    <script src="storage.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>

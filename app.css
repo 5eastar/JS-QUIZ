@@ -1,0 +1,379 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
+    --accent-gradient: linear-gradient(135deg, #43e97b, #38f9d7);
+    --light-bg: #f9f9fb;
+    --card-bg: #ffffff;
+    --text-dark: #2d3748;
+    --text-light: #718096;
+    --border-light: rgba(226, 232, 240, 0.9);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-behavior: smooth;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 24px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+/* Typography */
+h1 {
+    text-align: center;
+    margin-bottom: 14px;
+    color: #4a5568;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+h2 {
+    color: #2d3748;
+    margin-bottom: 12px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-bottom: 2px solid #eef2ff;
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+/* Layout Sections */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.top-section {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    padding: 6px 0;
+}
+
+.pupil-section,
+.options-section {
+    flex: 0 0 calc(50% - 8px);
+    min-width: 260px;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 180px;
+}
+
+.bottom-section {
+    width: 100%;
+    background: #f7fafc;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.03);
+    margin-top: 4px;
+    min-height: 120px;
+    max-height: calc(100vh - 220px);
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Input Button Group */
+.input-button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-button-group input {
+    flex: 1;
+}
+
+.input-button-group button {
+    flex-shrink: 0;
+    padding: 12px 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.input-button-group button:hover {
+    background: #5a67d8;
+}
+
+/* Pupil Info Layout */
+.pupil-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.pupil-main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pupil-info {
+    flex: 0 0 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Info Box */
+.info-box {
+    background: #edf2f7;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.info-box p {
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+}
+
+.info-box p:last-child {
+    margin-bottom: 0;
+}
+
+/* Checkbox List */
+.checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 5px;
+    padding: 5px;
+    max-height: 120px;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    background-color: #f7fafc;
+    border: 2px solid transparent;
+    scrollbar-width: thin;
+    scrollbar-color: #667eea #edf2f7;
+}
+
+.checkbox-item:hover {
+    background-color: #e2e8f0;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.checkbox-item label {
+    cursor: pointer;
+    font-weight: 500;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    color: #333;
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.btn-link:hover {
+    color: #5a67d8;
+}
+
+/* Hint Text */
+.hint {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+    }
+
+    .pupil-section,
+    .options-section {
+        flex: 1 1 auto;
+        max-width: none;
+    }
+
+    .pupil-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pupil-info {
+        flex: 1 1 auto;
+        max-width: none;
+        width: 100%;
+    }
+
+    .container {
+        max-height: calc(100vh - 20px);
+    }
+
+    .bottom-section {
+        max-height: none;
+        padding: 14px;
+    }
+
+    .checkbox-list {
+        max-height: 140px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .pupil-section,
+    .options-section,
+    .bottom-section {
+        padding: 15px;
+    }
+
+    .input-button-group {
+        flex-direction: column;
+    }
+
+    .input-button-group button {
+        width: 100%;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+}

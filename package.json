@@ -1,0 +1,11 @@
+{
+  "name": "quiz-data-generator",
+  "version": "1.0.0",
+  "description": "Automatically generate quiz data from image folders",
+  "main": "generate-data.js",
+  "scripts": {
+    "generate": "node generate-data.js"
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Quiz</title>
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div class="container">
+        <button id="btn-circle" class="btn-circle">T</button>
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>Ready to Play?</h1>
+            <button class="btn-primary" id="begin-btn">Let's Go!</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen" style="display:none;">
+            <div class="quiz-top-bar">
+                <div id="question-counter" class="question-counter"></div>
+                <button id="sound-btn" class="sound-btn" title="Hear it again!">🔊</button>
+            </div>
+           
+            <div id="question-text" class="question-text"></div>
+            <div id="options-grid" class="options-grid"></div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen" style="display:none;">
+            <h1>🎉 You're Finished! 🎉<br> Good Job!</h1>
+            <!-- <button class="btn-primary" onclick="window.location.href='index.html'">
+                Back to Menu
+            </button> -->
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="storage.js"></script>
+    <script src="sounds.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

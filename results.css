@@ -1,0 +1,204 @@
+.results-container {
+    max-width: 100%;
+    height: 100% !important;
+    overflow-y: auto !important;
+    padding: 15px !important;
+}
+
+.results-container h1 {
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, #FF6B9D, #C06FFF, #4D9FFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    align-content: center;
+}
+
+
+.section {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+/* Summary Section */
+.summary-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.summary-section h2 {
+    margin-bottom: 15px;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: #e9ecef;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 15px;
+}
+
+.summary-value {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.summary-label {
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+/* Tables */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+}
+
+.results-table th,
+.results-table td {
+    padding: clamp(8px, 1.5vh, 12px);
+    text-align: left;
+}
+
+.results-table th {
+    background: #7a42a4;
+    color: white;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+}
+
+.results-table tbody tr:nth-child(even) {
+    background: #c3a3fd;
+}
+
+.results-table tbody tr:nth-child(odd) {
+    background: #cdb4fb;
+}
+
+
+/* Center align specific columns */
+.results-table th:first-child,
+.results-table td:first-child,
+.results-table th:nth-child(3),
+.results-table td:nth-child(3),
+.results-table th:nth-child(4),
+.results-table td:nth-child(4) {
+    text-align: center;
+}
+
+/* Score badges */
+.score-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight:bolder;
+    font-size: clamp(0.8rem, 1.6vw, 0.9rem);
+}
+
+.score-badge.plus {
+    color: #2f9e44;
+}
+
+.score-badge.minus {
+    color: #c92a2a;
+}
+
+/* Button Styles */
+.button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.btn-secondary {
+    padding: 12px 24px;
+    background: #868e96;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* History styles */
+.history-item {
+    background: #dfbcfabc;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border-left: 4px solid #b43dd0;
+}
+
+.history-item h3 {
+    color: #333;
+    margin-bottom: 8px;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+}
+
+.history-item p {
+    margin: 4px 0;
+    color: #555;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .results-container {
+        padding: 10px !important;
+    }
+    
+    .section {
+        padding: 12px;
+    }
+    
+    .summary-section {
+        padding: 15px;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}
