@@ -462,6 +462,7 @@ var triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10z' });
 balloons.forEach((balloon) => {
     balloon.addEventListener("click", () => {
         balloon.style.visibility = "hidden";
+        soundFX.playPop();
 
         confetti({
             particleCount: 60,
