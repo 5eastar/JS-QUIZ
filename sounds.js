@@ -78,7 +78,53 @@ class SoundEffects {
         oscillator.start(ctx.currentTime);
         oscillator.stop(ctx.currentTime + 0.05);
     }
+    playPop() {
+    this.init();
+    const ctx = this.audioContext;
     
+    // Exciting burst with multiple frequencies
+    const frequencies = [150, 250, 350, 450];
+    
+    frequencies.forEach((freq, i) => {
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        oscillator.frequency.setValueAtTime(freq, ctx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.15);
+        oscillator.type = i % 2 === 0 ? 'sine' : 'triangle';
+        
+        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        
+        oscillator.start(ctx.currentTime + i * 0.02);
+        oscillator.stop(ctx.currentTime + 0.15 + i * 0.02);
+    });
+    
+    // Add white noise burst for extra impact
+    const bufferSize = ctx.sampleRate * 0.1;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    
+    const noise = ctx.createBufferSource();
+    const noiseGain = ctx.createGain();
+    
+    noise.buffer = buffer;
+    noise.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    
+    noiseGain.gain.setValueAtTime(0.15, ctx.currentTime);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+    
+    noise.start(ctx.currentTime);
+}
+
     playCelebration() {
         this.init();
         const ctx = this.audioContext;
