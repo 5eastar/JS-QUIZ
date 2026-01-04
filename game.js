@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Start quiz
-function startQuiz() {
-    generateQuestions();
+async function startQuiz() {
+    await generateQuestions();
     quizStartTime = Date.now();
     
     const startScreen = document.getElementById('start-screen');
@@ -113,13 +113,30 @@ function setupSoundButton() {
 }
 
 // Generate questions array
-function generateQuestions() {
-    const program = quizData.programs[config.programIndex];
-    const targets = config.selectedStimuli.map(i => program.stimulus[i]);
+async function generateQuestions() {
+    const allPrograms = await getAllPrograms();
+    const program = allPrograms[config.programIndex];
+
+    if (!program) {
+        console.error('Program not found');
+        return;
+    }
+
+     // Get unique target stimuli by name to avoid duplicates
+    const selectedStimuli = config.selectedStimuli.map(i => program.stimulus[i]);
+    const uniqueTargets = [];
+    const seenNames = new Set();
+    
+    for (const stim of selectedStimuli) {
+        if (!seenNames.has(stim.name)) {
+            seenNames.add(stim.name);
+            uniqueTargets.push(stim);
+        }
+    }
     
     questions = [];
     for (let i = 0; i < config.maxQuestions; i++) {
-        const target = targets[i % targets.length];
+        const target = uniqueTargets[i % uniqueTargets.length];
         questions.push({
             target,
             originalTarget: target
@@ -130,7 +147,9 @@ function generateQuestions() {
 // Show current question
 async function showQuestion() {
     const question = questions[currentQuestion];
-    const program = quizData.programs[config.programIndex];
+    const allPrograms = await getAllPrograms();
+    const program = allPrograms[config.programIndex];
+
     await fadeOutQuestion();
     // Start question timer (only on first attempt)
     if (!isInCorrection) {
@@ -216,7 +235,8 @@ function updateQuestionCounter() {
 // Generate options array with target and distractors
 function generateOptions(target, program) {
     const options = [target];
-    const otherStimuli = program.stimulus.filter(s => s !== target);
+
+    const otherStimuli = program.stimulus.filter(s => s.name !== target.name);
     // Shuffle and pick random distractors
     const shuffled = shuffleArray([...otherStimuli]);
     const numDistractors = Math.min(config.fieldSize - 1, shuffled.length);
@@ -367,7 +387,7 @@ function showCorrection() {
     correctionAttempts++;
     isInCorrection = true;
     
-    setFeedback(`This is ${question.target.name}`, '');
+    setFeedback(`This is ${question.target.name}`, 'neutral-feedback');
     
     if (correctionAttempts >= 3) {
         speak(`This is ${question.target.name}. Let's move on.`);
@@ -430,6 +450,54 @@ function endQuiz() {
     sessionStorage.setItem('quizResultsSaved', 'false');
 }
 
+// Balloon Animations
+
+
+
+const balloons = document.querySelectorAll(".balloons img");
+
+let balloonClick = 0;
+var triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10z' });
+
+balloons.forEach((balloon) => {
+    balloon.addEventListener("click", () => {
+        balloon.style.visibility = "hidden";
+
+        confetti({
+            particleCount: 60,
+            spread: 45,
+            scalar: 1.5,
+            shapes: [triangle],
+            origin: {
+                x: balloon.getBoundingClientRect().left / window.innerWidth,
+                y: balloon.getBoundingClientRect().top / window.innerHeight,
+            },
+            colors: ["#ffaa00", "#ff00aa", "#aa00ff", "#aaff00", "#00aaff",],
+            gravity: 0.8,
+        });
+
+        balloonClick++;
+
+        if (balloonClick === balloons.length) {
+            setTimeout(() => {
+                resetBalloons();
+                }, 600);
+        }
+    });
+});
+
+function resetBalloons () {
+    balloons.forEach((balloon) => {
+        balloon.style.visibility = "visible";
+
+        const parent = balloon.parentNode;
+        parent.removeChild(balloon);
+        parent.appendChild(balloon);
+    });
+
+balloonClick = 0;
+}
+
 // Show results (teacher view)
 function showResults() {
     const totalQuizTime = quizStartTime ? (Date.now() - quizStartTime) / 1000 : 0;
@@ -485,7 +553,7 @@ function speak(text) {
         // Small delay to ensure cancel completes
         setTimeout(() => {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.9;
+            utterance.rate = 0.8;
             utterance.pitch = 1;
             utterance.volume = 1;
             utterance.lang = 'en-GB';
