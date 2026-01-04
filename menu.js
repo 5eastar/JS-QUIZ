@@ -1,14 +1,14 @@
 let selectedPupilId = null;
 
 // Initialize menu on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadPupils();
-    loadPrograms();
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadPupils();
+    await loadPrograms();
     setupEventListeners();
 });
 
 // Load pupils into dropdown
-function loadPupils() {
+async function loadPupils() {
     const pupils = getAllPupils();
     const pupilSelect = document.getElementById('pupil-select');
     
@@ -24,17 +24,22 @@ function loadPupils() {
 }
 
 // Load programs into dropdown
-function loadPrograms() {
+async function loadPrograms() {
     const programSelect = document.getElementById('program-select');
-    
-    quizData.programs.forEach((program, index) => {
+    //include custom programs
+    programSelect.innerHTML = '<option value="">-- Select Program --</option>';
+    const allPrograms = await getAllPrograms();
+
+    allPrograms.forEach((program, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = program.name;
+        const badge = program.builtin ? ' 🏠' : (program.custom ? ' ⭐' : '');
+        option.textContent = `${program.name}${badge}`;
         programSelect.appendChild(option);
     });
-}
+  }
 
+    
 // Setup event listeners
 function setupEventListeners() {
     const pupilSelect = document.getElementById('pupil-select');
@@ -51,7 +56,7 @@ function setupEventListeners() {
     newPupilInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleAddPupil();
     });
-    viewHistoryBtn.addEventListener('click', viewPupilHistory);
+    viewHistoryBtn?.addEventListener('click', viewPupilHistory);
     programSelect.addEventListener('change', handleProgramChange);
     fieldSizeInput.addEventListener('input', validateNumberInput);
     maxQuestionsInput.addEventListener('input', validateNumberInput);
@@ -80,8 +85,13 @@ function validateNumberInput(e) {
 function handlePupilSelect(e) {
     const pupilId = e.target.value;
     const pupilInfo = document.getElementById('pupil-info');
+    pupilInfo.style.display = 'flex';
+    requestAnimationFrame(() => {
+        pupilInfo.classList.add('show');
+    });
     
     if (pupilId === '') {
+        pupilInfo.classList.remove('show');
         pupilInfo.style.display = 'none';
         selectedPupilId = null;
         updateStartButton();
@@ -91,9 +101,11 @@ function handlePupilSelect(e) {
     const pupil = getPupilById(pupilId);
     if (pupil) {
         selectedPupilId = pupil.id;
-        document.getElementById('selected-pupil-name').textContent = pupil.name;
-        document.getElementById('pupil-quiz-count').textContent = pupil.quizCount;
-        pupilInfo.style.display = 'block';
+        document.getElementById('selected-pupil-name').textContent = `${pupil.name} Pupil Data`;
+        pupilInfo.style.display = 'flex';
+        requestAnimationFrame(() => {
+            pupilInfo.classList.add('show');
+        });
         
         // Clear new pupil input
         document.getElementById('new-pupil-name').value = '';
@@ -135,7 +147,7 @@ function viewPupilHistory() {
 }
 
 // Handle program selection change
-function handleProgramChange(e) {
+async function handleProgramChange(e) {
     const programIndex = e.target.value;
     const stimulusGroup = document.getElementById('stimulus-group');
     const stimulusList = document.getElementById('stimulus-list');
@@ -151,7 +163,11 @@ function handleProgramChange(e) {
     stimulusList.innerHTML = '';
     
     // Load stimuli for selected program
-    const program = quizData.programs[programIndex];
+    const allPrograms = await getAllPrograms();
+    const program = allPrograms[programIndex];
+
+    if (!program) return;
+
     program.stimulus.forEach((stim, index) => {
         const div = document.createElement('div');
         div.className = 'checkbox-item';
@@ -227,3 +243,6 @@ function startQuiz() {
     sessionStorage.setItem('quizConfig', JSON.stringify(config));
     window.location.href = 'game.html';
 }
+// Attach click handler to new compact button
+document.getElementById('pupil-info-btn').addEventListener('click', viewPupilHistory);
+
