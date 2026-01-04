@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/app.css">
     <link rel="stylesheet" href="styles/quiz.css">
 </head>
@@ -12,8 +13,10 @@
         <button id="teacher-btn" class="teacher-btn">T</button>
         <!-- Start Screen -->
         <div id="start-screen" class="screen">
-            <h1>Ready to Play?</h1>
-            <button class="btn-primary" id="begin-btn">Let's Go!</button>
+            <h1> Ready to Play? </h1>
+            <button class="btn-primary" id="begin-btn">
+                Let's Go!
+            </button>
         </div>
 
         <!-- Quiz Screen -->
@@ -30,15 +33,29 @@
 
         <!-- End Screen -->
         <div id="end-screen" class="screen" style="display:none;">
-            <h1>🎉 You're Finished! 🎉<br> Good Job!</h1>
-            <!-- <button class="btn-primary" onclick="window.location.href='index.html'">
-                Back to Menu
-            </button> -->
+            <div class ="balloons">
+                <img src="/images/animation/b1.png" alt="" />
+                <img src="/images/animation/b2.png" alt="" />
+                <img src="/images/animation/b3.png" alt="" />
+                <img src="/images/animation/b4.png" alt="" />
+                <img src="/images/animation/b5.png" alt="" />
+                <img src="/images/animation/b6.png" alt="" />
+                <img src="/images/animation/b7.png" alt="" />
+                 
+            </div>
+            <h1> You're Finished!   </h1>
+            <h1>✰ Good Job ✰</h1>
+            <button class="btn-primary" onclick="window.location.href='game.html'">
+                Try again ⟲
+            </button>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="file-storage-manager.js"></script>
     <script src="data.js"></script>
     <script src="storage.js"></script>
+    <script src="program-manager.js"></script>
     <script src="sounds.js"></script>
     <script src="game.js"></script>
 </body>
