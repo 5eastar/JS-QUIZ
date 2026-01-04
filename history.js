@@ -63,10 +63,12 @@ function displayPupilHistory(pupil) {
     // Display quiz list
     let historyHTML = '';
     history.reverse().forEach((quiz, index) => {
+        const allPrograms = getAllPrograms();
+        const programName = allPrograms[quiz.config.programIndex]?.name || 'Unknown Program';
         historyHTML += `
             <div class="history-item">
                 <h3>Quiz ${history.length - index} - ${formatDate(quiz.date)}</h3>
-                <p><strong>Program:</strong> ${quizData.programs[quiz.config.programIndex].name}</p>
+                <p><strong>Program:</strong> ${programName}</p>
                 <p><strong>Score:</strong> ${quiz.summary.correct}/${quiz.summary.totalQuestions} (${quiz.summary.accuracy}%)</p>
                 <p><strong>Duration:</strong> ${formatTime(quiz.totalTime)}</p>
                 <button class="btn-link" onclick="viewQuizDetails('${quiz.id}')">View Details</button>
