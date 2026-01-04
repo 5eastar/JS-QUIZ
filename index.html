@@ -4,49 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Quiz - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/app.css">
 </head>
 <body>
     <div class="container">
-        <h1>Interactive Learning Game</h1>
+        <h1 id="container">Interactive Learning Game</h1>
         <div class="top-section">
         <!-- Pupil Selection -->
         <div class="pupil-section">
-            <h2>Select Pupil</h2>
-
-            <!-- compact row: main controls + small info box -->
+            <h2 id="container">Select Pupil</h2>
             <div class="pupil-row">
                 <div class="pupil-main">
-                    <div class="form-group">
-                        <label for="pupil-select">Choose existing pupil:</label>
-                        <select id="pupil-select">
-                            <option value="">-- Select Pupil --</option>
-                        </select>
+                    <div class="pupil-select-row">
+                        <div class="form-group">
+                            <label for="pupil-select">Choose existing Pupil:</label>
+                            <select id="pupil-select">
+                                <option value="">-- Select Pupil --</option>
+                            </select>
+                        </div>
+                    <div class="pupil-info" id="pupil-info" style="display:none;">
+                        <button id="pupil-info-btn" class="pupil-info-btn">
+                            <span id="selected-pupil-name"></span>
+                            <span id="pupil-quiz-count"></span>
+                        </button>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="new-pupil-name">Or add new pupil:</label>
+                        <label for="new-pupil-name">Or add new Pupil:</label>
                         <div class="input-button-group">
                             <input type="text" id="new-pupil-name" placeholder="Enter pupil name">
-                            <button id="add-pupil-btn" class="btn-secondary">Add</button>
+                            <button id="add-pupil-btn" class="btn-secondary"><h3 id="container">Add</h3></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- moved here and made compact; visibility still controlled via JS -->
-                <div class="pupil-info" id="pupil-info" style="display:none;">
-                    <div class="info-box">
-                        <p><strong>Selected:</strong> <span id="selected-pupil-name"></span></p>
-                        <p><strong>Total Quizzes:</strong> <span id="pupil-quiz-count">0</span></p>
-                        <button id="view-history-btn" class="btn-link">View History</button>
-                    </div>
-                </div>
+
             </div>
-        </div>
+            </div>
 
         <!-- Options -->
         <div class="options-section">
-            <h2>Options</h2>
+            <h2 id="container">Options</h2>
 
             <!-- Field Size Selection -->
             <div class="form-group">
@@ -59,33 +59,84 @@
                 <label for="max-questions">Questions (1-20):</label>
                 <input type="number" id="max-questions" min="1" max="20" value="10" required>
             </div>
-        </div>
-        </div>
+        </div> 
+        </div>       
+        
         <!-- Program Selection -->
         <div class="bottom-section">
-            <h2>Select Program</h2>
-
+            <h2 id="container">Programs</h2>
+            <button id="openProgramModal" class ="btn-secondary"><h3 id="container">Manage Programs</h3></button>
             <!-- Program Selection -->
             <div class="form-group">
                 <label for="program-select">Choose a Program:</label>
                 <select id="program-select">
-                    <option value="">-- Choose a Program --</option>
                 </select>
             </div>
 
             <!-- Stimulus Selection -->
             <div class="form-group" id="stimulus-group" style="display:none;">
-                <label>Select Targets (up to 5):</label>
+                <label>Choose Targets (up to 5):</label>
                 <div id="stimulus-list" class="checkbox-list"></div>
                 <p class="hint">Selected: <span id="selected-count">0</span>/5</p>
             </div>
 
-            <button id="start-btn" class="btn-primary" disabled>Start Quiz</button>
+            <button id="start-btn" class="btn-primary" disabled><h3 id="container">Start Quiz</h3></button>
         </div>
     </div>
+        <!-- Program Management Modal -->
+<div id="programModal" class="modal hidden">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+        <h2 id="container">Manage Programs</h2>
+            <div class="tab-buttons">
+                <button id="tabAdd" class="active"><h3 id="container">➕ Add Program</h3></button>
+                <button id="tabEdit"><h3 id="container">✏️ Edit Program</h3></button>
+            </div>
+
+        <!-- Add Program -->
+        <section id="addProgramSection" class = "tab-section show">
+            <form id="programForm">
+                <label>Program Name:</label>
+                <input type="text" placeholder= "e.g. Farm Animals" required />
+
+                <div id="stimuliContainer">
+                    <label>Targets</label>
+                </div>
+
+
+            <button type="button" id="addStimulusBtn">+ Add Stimulus</button>
+            <button type="submit">Save Program</button>
+        </form>
+    </section>
+
+        <!-- Existing Programs -->
+        <section id="editProgramSection" class="tab-section hidden">
+            <h3>Choose a Program to Edit:</h3>
+            <div class="form-group">
+                <select id="programSelectDropdown">
+                <option value="">-- Select Program --</option>
+                </select>
+            </div>
+
+
+            <!-- Placeholder / Stimuli container -->
+            <div id="editStimuliContainer" class="edit-placeholder">
+                <p>Select a program above to view and edit its stimuli.</p>
+            </div>
+
+            <button type="button" id="addEditStimulusBtn">Add Stimulus</button>
+            <button type="button" id="saveEditsBtn">Save Changes</button>
+
+    </section>
+  </div>
+</div>
+</div>
     
+    <script src="file-storage-manager.js"></script>
     <script src="data.js"></script>
     <script src="storage.js"></script>
+    <script src="program-manager.js"></script>
     <script src="menu.js"></script>
+    
 </body>
 </html>
