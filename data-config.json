@@ -3,18 +3,16 @@
     "jungleAnimals": "Jungle Animals",
     "homeItems": "Home Items",
     "veg": "Vegetables",
-    "cartoonChars": "Cartoon Characters",
     "bodyParts": "Body Parts"
   },
   "stimulusNames": {
     "cauli": "Cauliflower",
     "rbeans": "Runner Beans",
     "bsprouts": "Brussel Sprouts",
-    "letterbox": "Letterbox",
-    "doorbell": "Doorbell"
   },
   "ignore": [
     "temp",
     "backup"
   ]
+
 }
