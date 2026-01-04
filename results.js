@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     displaySummary(resultsData.results, resultsData.totalTime);
     displayQuestionResults(resultsData.results);
-    displayTargetSummary(resultsData.results);
     
     // Setup export button
     document.getElementById('export-btn').addEventListener('click', () => {
@@ -50,8 +49,8 @@ function displaySummary(results, totalTime) {
     const targetSummaryHTML = generateTargetSummary(results);
     
     const summaryHTML = `
-        <h2>Overall Performance</h2>
-        <div class="summary-wrapper">
+        <h2 id="container">Overall Performance</h2>
+        <div class="summary-wrapper" id="container">
             <div class="summary-stats">
                 <div class="summary-grid">
                     <div class="summary-item">
@@ -72,17 +71,22 @@ function displaySummary(results, totalTime) {
                     </div>
                 </div>
             </div>
-            <div class="target-summary-compact">
-                <h3>Results by Target</h3>
+            ${targetSummaryHTML ? `
+            <h2>Results by Target</h2>
                 ${targetSummaryHTML}
-            </div>
+        ` : ''}
+
         </div>
     `;
     
     document.getElementById('summary').innerHTML = summaryHTML;
 }
+
+
 // Generate target summary table HTML
 function generateTargetSummary(results) {
+    
+
     // Group by target
     const targetGroups = {};
     results.forEach(result => {
@@ -91,50 +95,43 @@ function generateTargetSummary(results) {
         }
         targetGroups[result.target].push(result);
     });
+    const targets = Object.keys(targetGroups).sort();
+    if (targets.length === 1 || targets.length === 0) {
+        return "";
+        }
     
-    let tableHTML = `
-        <table class="compact-target-table">
-            <thead>
-                <tr>
-                    <th>Target</th>
-                    <th>Score</th>
-                    <th>Avg Time</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    
-    // Create rows for each target
-    Object.keys(targetGroups).sort().forEach(target => {
+    let html = `<div class="summary-grid">`;
+
+    targets.forEach(target => {
         const targetResults = targetGroups[target];
         const correct = targetResults.filter(r => r.result === 'plus').length;
         const total = targetResults.length;
-        
-        // Calculate average response time for this target
+        const targetAccuracy = ((correct / total) * 100).toFixed(1);
+
         const validTimes = targetResults.filter(r => r.responseTime && r.responseTime > 0);
         const avgTime = validTimes.length > 0
             ? (validTimes.reduce((sum, r) => sum + r.responseTime, 0) / validTimes.length).toFixed(1)
             : '-';
-        
-        tableHTML += `
-            <tr>
-                <td><strong>${target}</strong></td>
-                <td>${correct}/${total}</td>
-                <td>${avgTime}${avgTime !== '-' ? 's' : ''}</td>
-            </tr>
+
+        html += `
+        <div class="summary-item">
+                <div class="summary-value"><strong>${correct}/${total}</strong><div class="summary-label">Score</div></div>
+                <div class="summary-value"><strong>${avgTime}s</strong><div class="summary-label">Avg Time</div></div>
+                <div class="summary-value"><strong>${targetAccuracy}%</strong><div class="summary-label">Accuracy</div></div>
+                <div class="summary-label"><h4 id="summary-label">${target}</h4></div>
+
+            </div>
         `;
     });
-    
-    tableHTML += `
-            </tbody>
-        </table>
-    `;
-    
-    return tableHTML;
+
+    html += `</div>`;
+    return html;
 }
+
 
 // Display question-by-question results
 function displayQuestionResults(results) {
+    
     const tableWrapper = document.createElement('div');
         tableWrapper.className = 'results-table-wrapper';
         
@@ -146,9 +143,9 @@ function displayQuestionResults(results) {
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Target</th>
-                    <th>Score</th>
-                    <th>Response Time</th>
+                    <th id="container">Target</th>
+                    <th id="container">Score</th>
+                    <th id="container">Response Time</th>
                 </tr>
             </thead>
             <tbody></tbody>
